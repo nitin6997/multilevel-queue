@@ -1,0 +1,310 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<string.h>
+#include<fcntl.h>
+#include<pthread.h>
+int i,m,n,tq,tq1;
+int q1[100],q2[100];
+int P[100],Pr[100],bt[100],at[100],rmt[100],bt1[100],at1[100],rt[100];
+void *faculty_first()
+{
+		printf("\n\n Enter Time Quantum you want to give for each faculty query= ");
+	scanf("%d",&tq1);
+	int t1,remain1,flag1=0;
+	int waiting_time1=0,turn_time1=0;
+	remain1=m;
+	for(i=0;i<m;i++)
+{
+	rt[i]=bt1[i];
+}
+printf("\n\n------------SOLVING FACULTY QUERIES------------------\n\n");
+
+printf("\n\nProcess\t|Turnaround time|Waiting time\n\n");
+for(t1=0,i=0;remain1!=0;)
+{
+if(rt[i]<=tq1 && rt[i]>0)
+{
+t1=t1+rt[i];
+rt[i]=0;
+flag1=1;
+}
+else if(rt[i]>0)
+{
+rt[i]=rt[i]-tq1;
+t1=t1+tq1;
+}
+if(rt[i]==0 && flag1==1)
+{
+remain1--;
+printf("F%d\t|\t%d\t|\t%d\n",i+1,t1-at1[i],t1-at1[i]-bt1[i]);
+waiting_time1=waiting_time1+t1-at1[i]-bt1[i];
+turn_time1=turn_time1+t1-at1[i];
+flag1=0;
+}
+if(i==m-1)
+i=0;
+else if(at1[i+1]<=t1)
+i++;
+else
+i=0;
+}
+if(m==0){
+printf("\nAverage waiting time= %d\n",0);
+printf("\nAverage turnaround time= %d\n",0);	
+}
+else{
+printf("\nAverage waiting time= %f\n",waiting_time1*1.0/m);
+printf("\nAverage turnaround time= %f\n",turn_time1*1.0/m);
+}
+printf("Enter Time Quantum you want to give for each student query= ");
+scanf("%d",&tq);
+printf("\n\n Turnaround time \n\n");
+int t,remain,flag=0;
+int waiting_time=0,turn_time=0;
+remain=n;
+	for(i=0;i<n;i++)
+	{
+		rmt[i]=bt[i];
+	}
+printf("\n\n------------SOLVING STUDENT QUERIES------------------\n\n");
+
+
+printf("\n\nProcess\t | Turnaround time | Waiting time\n\n");
+		for(t=0,i=0;remain!=0;)
+		{
+			if(rmt[i]<=tq && rmt[i]>0)
+			{
+				t=t+rmt[i];
+				rmt[i]=0;
+				flag=1;
+			}
+			else if(rmt[i]>0)
+			{	
+				rmt[i]=rmt[i]-tq;
+				t=t+tq;
+			}
+			if(rmt[i]==0 && flag==1)
+			{
+				remain--;
+				printf("S%d\t | \t%d\t | \t%d\n",i+1,t-at[i],t-at[i]-bt[i]);
+				waiting_time=waiting_time+t-at[i]-bt[i];
+				turn_time=turn_time+t-at[i];
+				flag=0;
+			}
+			if(i==n-1)
+			{
+				i=0;
+			}
+			else if(at[i+1]<=t)
+			{
+				i++;
+		    }
+
+			else
+			{
+				i=0;
+			}
+}
+	if(n==0)
+	{
+		printf("\nAverage waiting time= %d\n",0);
+		printf("\nAverage turnaround time= %d\n",0);	
+	}
+	else
+	{
+		printf("\nAverage waiting time= %f\n",waiting_time*1.0/n);
+		printf("\nAverage turnaround time= %f\n",turn_time*1.0/n);
+	}
+
+	
+}
+
+void *student_first()
+{
+		printf("Enter Time Quantum for each student query= ");
+		scanf("%d",&tq);
+		printf("\n\n Turnaround time means --> \n\n");
+		int t,remain,flag=0;
+		int waiting_time=0,turn_time=0;
+		remain=n;
+		for(i=0;i<n;i++)
+		{
+			rmt[i]=bt[i];
+		}
+
+		printf("\n\n------------SOLVING STUDENT QUERIES------------------\n\n");
+		printf("\n\nProcess\t | Turnaround time | Waiting time\n\n");
+		for(t=0,i=0;remain!=0;)
+		{
+			if(rmt[i]<=tq && rmt[i]>0)
+			{
+				t=t+rmt[i];
+				rmt[i]=0;
+				flag=1;
+			}
+			else if(rmt[i]>0)
+			{	
+				rmt[i]=rmt[i]-tq;
+				t=t+tq;
+			}
+			if(rmt[i]==0 && flag==1)
+			{
+				remain--;
+				printf("S%d\t | \t%d\t | \t%d\n",i+1,t-at[i],t-at[i]-bt[i]);
+				waiting_time=waiting_time+t-at[i]-bt[i];
+				turn_time=turn_time+t-at[i];
+				flag=0;
+			}
+			if(i==n-1)
+			{
+				i=0;
+			}
+			else if(at[i+1]<=t)
+			{
+				i++;
+		    }
+			else
+			{
+				i=0;
+			}
+}
+	if(n==0)
+	{
+		printf("\nAverage waiting time= %d\n",0);
+		printf("\nAverage turnaround time= %d\n",0);	
+	}
+	else
+	{
+		printf("\nAverage waiting time= %f\n",waiting_time*1.0/n);
+		printf("\nAverage turnaround time= %f\n",turn_time*1.0/n);
+	}
+	printf("\n\n Enter Time Quantum you want to give for each faculty query= ");
+	scanf("%d",&tq1);
+	int t1,remain1,flag1=0;
+	int waiting_time1=0,turn_time1=0;
+	remain1=m;
+	for(i=0;i<m;i++)
+	{
+		rt[i]=bt1[i];
+	}
+	printf("\n\n------------SOLVING FACULTY QUERIES------------------\n\n");
+
+	printf("\n\nProcess\t|Turnaround time|Waiting time\n\n");
+	for(t1=0,i=0;remain1!=0;)
+	{
+		if(rt[i]<=tq1 && rt[i]>0)
+		{
+			t1=t1+rt[i];
+			rt[i]=0;
+			flag1=1;
+		}
+		else if(rt[i]>0)
+		{
+			rt[i]=rt[i]-tq1;
+			t1=t1+tq1;
+		}
+		if(rt[i]==0 && flag1==1)
+		{
+			remain1--;
+			printf("F%d\t|\t%d\t|\t%d\n",i+1,t1-at1[i],t1-at1[i]-bt1[i]);
+			waiting_time1=waiting_time1+t1-at1[i]-bt1[i];
+			turn_time1=turn_time1+t1-at1[i];
+			flag1=0;
+		}
+		if(i==m-1)
+			i=0;
+		else if(at1[i+1]<=t1)
+			i++;
+		else
+			i=0;
+	}
+	if(m==0)
+	{
+		printf("\nAverage waiting time= %d\n",0);
+		printf("\nAverage turnaround time= %d\n",0);	
+	}
+	else
+	{
+		printf("\nAverage waiting time= %f\n",waiting_time1*1.0/m);
+		printf("\nAverage turnaround time= %f\n",turn_time1*1.0/m);
+	}
+}
+
+
+int main()
+{ 
+	pthread_t t1,t2;	
+	long d;
+	printf("ENTER THE ID \n    ");
+	scanf("%ld",&d);
+	if(d==11606054)	
+	{
+		printf("Successfully Logged-In \n\n");
+		printf("WELCOME NITIN SHARMA\n\n");
+
+		printf("Number of student queries\n");
+		scanf("%d",&n);
+		printf("Number of faculty queries\n");
+		scanf("%d",&m);
+		printf("------STUDENT'S  QUERIES:------\n\n");
+		for(i=0;i<n;i++)
+		{
+			printf("\n\nEnter Details for Student Query No. %d ",i+1);
+			P[i]=i+1;
+			q1[i]=P[i];
+			printf("\nBurst time = ");
+			scanf("%d",&bt[i]);
+			printf("\nArrival time =");
+			scanf("%d",&at[i]);
+			printf("\n\n");
+		}
+			printf("\n\n");
+			printf("------FACULTY'S  QUERIES:------\n\n");
+		for(i=0;i<m;i++)
+		{
+			printf("\n\nEnter Details for Faculty query no. %d = ",i+1);
+			Pr[i]=i+1;
+			q2[i]=Pr[i];
+			printf("\nBurst time = ");
+			scanf("%d",&bt1[i]);
+			printf("\nArrival time =");
+			scanf("%d",&at1[i]);
+			printf("\n\n");
+		}
+		printf("\n\n");
+		printf("	STUDENT'S QUEUE	  Burst time	Arrival time\n");
+		for(i=0;i<n;i++)
+		{
+			printf("      	 S%d	    	  %d	    	 %d\n",P[i],bt[i],at[i]);
+		}
+		printf("\n\n************************************************************************\n\n");
+
+		printf("	FACULTY'S QUEUE	  Burst time	Arrival time|\n");
+		for(i=0;i<m;i++)
+		{
+			printf("      	 F%d	    	  %d	    	 %d\n",Pr[i],bt1[i],at1[i]);
+		}
+		printf("\n\nGIVE PRIORITY (which Queue Evaluate First): \n\n");
+		printf("SELECT: \n\t1.Student Queue \n\t2.Faculty Queue");
+		int ch;
+		scanf("\n%d",&ch);
+		if(ch==1)
+		{
+			pthread_create(&t1,NULL,student_first,NULL);
+			pthread_join(t1,NULL);
+			printf("\n\n***QUERIES SOLVED***");
+		}
+		else if(ch==2)
+		{
+			pthread_create(&t2,NULL,faculty_first,NULL);
+			pthread_join(t2,NULL);
+			printf("\n\n***QUERIES SOLVED***");
+		}
+}
+	else
+	{
+		printf("wrong username\n\n");
+	}
+}
+
+
